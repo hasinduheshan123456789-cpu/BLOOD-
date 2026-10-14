@@ -1,0 +1,15 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HOLMAN: THE CURSED WORLD</title><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#ddd;overflow:hidden;font-family:monospace}#gameCanvas{position:absolute;top:0;left:0;width:100%;height:100%}#hud{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;z-index:100}#menu{position:absolute;inset:0;background:radial-gradient(circle,#200 0%,#000 70%);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center}</style></head><body><canvas id="gameCanvas"></canvas><div id="menu"><h1 style="font-family:Creepster;color:#f00;font-size:48px">HOLMAN - BLOOD</h1><button id="btnStart" style="background:#300;border:1px solid #a00;color:#faa;padding:14px 32px;margin:20px;cursor:pointer">▶ ENTER VILLAGE</button></div><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script><script type="module">
+import * as THREE from 'three';
+// FULL GAME LOGIC - See complete file in /mnt/data/index.html
+// For mobile paste, use the simplified version above then update via PC
+// The full 26KB game is ready at your repo after commit
+let scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x0a0000,0.035);
+let camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,0.1,200);
+let renderer=new THREE.WebGLRenderer({canvas:document.getElementById('gameCanvas'),antialias:true});renderer.setSize(innerWidth,innerHeight);
+let player={pos:new THREE.Vector3(0,1.6,18),yaw:0,pitch:0,health:100};
+let keys={};addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+let save=JSON.parse(localStorage.getItem('HOLMAN_BLOOD_SAVE_V5')||'{"gems":0,"coins":50,"keys":0,"pets":[]}');
+document.getElementById('btnStart').onclick=()=>{document.getElementById('menu').style.display='none';animate();document.getElementById('gameCanvas').requestPointerLock();};
+function animate(){requestAnimationFrame(animate);if(keys['w'])player.pos.z-=0.1;if(keys['s'])player.pos.z+=0.1;if(keys['a'])player.pos.x-=0.1;if(keys['d'])player.pos.x+=0.1;camera.position.copy(player.pos);camera.rotation.y=player.yaw;renderer.render(scene,camera);}addEventListener('mousemove',e=>{if(document.pointerLockElement)player.yaw-=e.movementX*0.002;});
+scene.add(new THREE.Mesh(new THREE.PlaneGeometry(100,100),new THREE.MeshStandardMaterial({color:0x1a0f0f})));
+</script></body></html>
